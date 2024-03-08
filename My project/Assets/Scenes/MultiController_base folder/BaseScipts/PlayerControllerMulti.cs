@@ -89,4 +89,21 @@ public class PlayerControllerMulti : MonoBehaviour
     {
 
     }
+
+    public void Attack(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState == PlayerState.normal)
+        {
+            if(canAttack)
+            {
+                anim.SetTrigger("Attack");
+                canAttack = false;
+                Invoke(nameof(ResetAttack), 2f);
+            }
+        }
+    }
+    void ResetAttack()
+    {
+        canAttack = true;
+    }
 }
