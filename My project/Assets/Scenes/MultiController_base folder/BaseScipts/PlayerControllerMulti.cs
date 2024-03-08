@@ -32,11 +32,15 @@ public class PlayerControllerMulti : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
         currentState = PlayerState.normal;
+        canAttack = true;
+        isFacingRight = true;
     }
 
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        //Detector continuo de Flip
+        FlipUpdater();
         
         if (currentState == PlayerState.normal)
         {
@@ -52,5 +56,37 @@ public class PlayerControllerMulti : MonoBehaviour
     void Movement()
     {
         rb.velocity = new Vector2(horInput.x * speed, rb.velocity.y);
+    }
+
+    void Flip()
+    {
+        Vector3 currentSacle = transform.localScale;
+        currentSacle.x += -1;
+        transform.localScale = currentSacle;
+        isFacingRight = !isFacingRight;
+
+    }
+
+    void FlipUpdater()
+    {
+        if ( horInput.x > 0 )
+        {
+            if (!isFacingRight)
+            {
+                Flip();
+            }
+        }
+        if(horInput.x < 0)
+        {
+            if (isFacingRight)
+            {
+                Flip();
+            }
+        }
+    }
+
+    public void Jump(InputAction.CallbackContext context)
+    {
+
     }
 }
