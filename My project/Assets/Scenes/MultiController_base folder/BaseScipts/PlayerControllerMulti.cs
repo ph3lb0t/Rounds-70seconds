@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem; //Add Input System Lib
 
@@ -16,6 +18,7 @@ public class PlayerControllerMulti : MonoBehaviour
     [Header("Character Stats & Status")]
     public float speed;
     public float jumpForce;
+    public float restablishCooldown = 2f;
     [SerializeField] bool isFacingRight;
     [SerializeField] bool canAttack;
     [SerializeField] PlayerState currentState;
@@ -26,6 +29,11 @@ public class PlayerControllerMulti : MonoBehaviour
     [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask groundLayer;
 
+    [Header("Knockback Configuration")]
+    public float KnockbackX;
+    public float KnockbackY;
+    public float knockbackMultiplier = 1;
+    Vector2 knockBackForce;
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -51,6 +59,35 @@ public class PlayerControllerMulti : MonoBehaviour
     private void FixedUpdate()
     {
         if (currentState == PlayerState.normal) { Movement(); }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if ( collision.gameObject.CompareTag("Attack") && currentState == PlayerState.normal )
+        {
+            //Trigger Animaciones 
+            currentState = PlayerState.damaged;
+            //Knockback segun posicion del que golpea
+            if (collision.gameObject.transform.position.x < gameObject.transform.position.x)
+            {
+                //Knockback hacia el X positivo
+                knockBackForce = new Vector2(KnockbackX, KnockbackY);
+                rb.AddForce(knockBackForce * knockbackMultiplier);
+                
+            }
+            else
+            {
+                knockBackForce = new Vector2(-KnockbackX,-KnockbackY);
+                rb.AddForce(knockBackForce * knockbackMultiplier);
+            }
+            Invoke(nameof(ResetStatus), restablishCooldown);
+
+        }
+    }
+    
+    void ResetStatus()
+    {
+        currentState = PlayerState.normal;
     }
 
     void Movement()
@@ -87,7 +124,13 @@ public class PlayerControllerMulti : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-
+        if (context.performed && isGrounded)
+        {
+            if (currentState == PlayerState.normal)
+            {
+                rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+            }
+        }
     }
 
     public void Attack(InputAction.CallbackContext context)

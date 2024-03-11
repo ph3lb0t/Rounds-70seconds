@@ -350,7 +350,19 @@ MonoBehaviour:
     m_ActionId: 1ad2e6df-3ab1-4b65-bdc4-f23f023786e4
     m_ActionName: Player1/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -4171553122489922170}
+        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 34786e86-ea33-42d7-9895-40978461c8fb
     m_ActionName: Player1/Jump[/Keyboard/space]
   - m_PersistentCalls:
@@ -378,19 +390,7 @@ MonoBehaviour:
     m_ActionId: 3b1cd18c-025b-4fdf-a538-e75932a3b9f5
     m_ActionName: Player2/Jump
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -4171553122489922170}
-        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
-        m_MethodName: Attack
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 25ac9df5-58e0-4f78-bc0f-708ab78b0392
     m_ActionName: Player2/Attack
   m_NeverAutoSwitchControlSchemes: 0
@@ -412,6 +412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   jumpForce: 5
+  restablishCooldown: 2
   isFacingRight: 0
   canAttack: 0
   currentState: 0
@@ -421,3 +422,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  KnockbackX: 100
+  KnockbackY: 100
+  knockbackMultiplier: 1
